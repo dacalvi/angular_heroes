@@ -1,0 +1,23 @@
+<h2 mat-dialog-title>Add new Hero</h2>
+<mat-dialog-content>
+  <form class="example-form" (submit)="save()">
+    <mat-form-field class="example-full-width">
+      <mat-label>Name</mat-label>
+      <input 
+      type="text" 
+      matInput
+      #heroNameInput
+      [formControl]="nameFormControl" 
+      [errorStateMatcher]="matcher"
+      [(ngModel)]="heroName"
+      placeholder="Ex. Battle Cat">
+      @if (nameFormControl.hasError('required')) {
+        <mat-error>Name is <strong>required</strong></mat-error>
+      }
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="heroName">Cancel</button>
+  <button mat-button [disabled]="!nameFormControl.valid" (click)="save()">Ok</button>
+</mat-dialog-actions>

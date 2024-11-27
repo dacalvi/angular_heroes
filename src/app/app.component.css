@@ -1,0 +1,6 @@
+.router-outlet {
+    display: flex;
+    justify-content: center;
+    align-items: fle;
+    height: 100vh;
+}
