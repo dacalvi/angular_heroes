@@ -58,7 +58,7 @@ export class HeroesService {
   }
 
   addHero(hero: Hero): Observable<Hero> {
-    this.heroes$.next([...this.heroes$.getValue(), hero]);
+    this.heroes$.next([hero, ...this.heroes$.getValue()]);
     return of(hero);
   }
 

@@ -1,1 +1,11 @@
-<p>delete-hero-dialog works!</p>
+<h2 mat-dialog-title>Delete Hero</h2>
+<mat-dialog-content>
+  <form class="example-form" (submit)="delete()">
+      <mat-label>Are you sure you want to delete {{heroName}}? </mat-label>
+      <input type="hidden" [formControl]="idFormControl">
+  </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="heroName">Cancel</button>
+  <button mat-button [disabled]="!idFormControl.valid" (click)="delete()">Delete</button>
+</mat-dialog-actions>

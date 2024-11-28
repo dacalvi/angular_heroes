@@ -16,7 +16,7 @@
             <span>{{hero.name}}</span>
             <span>
                 <button mat-button (click)="openEditDialog(hero.id)">Edit</button>
-                <button mat-button>Delete</button>
+                <button mat-button (click)="openDeleteDialog(hero.id)">Delete</button>
             </span>
         </span>
     </mat-list-item>

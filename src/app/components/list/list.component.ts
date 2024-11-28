@@ -14,6 +14,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { UppercaseDirective } from '../../directives/uppercase.directive';
 import { EditHeroDialogComponent } from '../edit-hero-dialog/edit-hero-dialog.component';
+import { DeleteHeroDialogComponent } from '../delete-hero-dialog/delete-hero-dialog.component';
 
 
 @Component({
@@ -61,6 +62,28 @@ export class ListComponent implements OnInit {
     });
 
     this.heroes$ = this.heroesService.getHeroes(this.pageIndex$.getValue(), this.pageSize$.getValue());
+  }
+
+  openDeleteDialog = async (id: string) => {
+    const hero = await this.heroesService.getHero(id);
+
+    if (!hero) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(DeleteHeroDialogComponent, {
+      data: {
+        name: hero.name,
+        id: hero.id
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(newHeroObject => {
+      if (!newHeroObject) {
+        return;
+      }
+      this.heroesService.deleteHero(newHeroObject.id);
+    });
   }
 
   openEditDialog = async (id: string) => {
