@@ -1,12 +1,15 @@
 {
-  "name": "spa",
+  "name": "my-list-of-heroes",
   "version": "0.0.0",
+  "author": "Daniel Calvi",
+  "email": "dacalvi@gmail.com",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "coverage": "ng test --no-watch --code-coverage"
   },
   "private": true,
   "dependencies": {
