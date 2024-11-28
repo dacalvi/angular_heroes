@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Hero } from '../../types/hero';
 import { HeroesService } from '../../services/heroes.service';
-import { AsyncPipe, NgFor } from '@angular/common';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { AsyncPipe, JsonPipe, NgFor } from '@angular/common';
+import { Observable, BehaviorSubject, Subscription } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { AddHeroDialogComponent } from '../add-hero-dialog/add-hero-dialog.component';
@@ -30,13 +30,15 @@ import { DeleteHeroDialogComponent } from '../delete-hero-dialog/delete-hero-dia
     MatFormFieldModule, 
     MatInputModule,
     MatIconModule,
-    UppercaseDirective
+    UppercaseDirective,
+    JsonPipe
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css',
 })
 
-export class ListComponent implements OnInit {
+export class ListComponent implements OnDestroy {
+  subscriptions = new Subscription();
   heroes$: Observable<Hero[]> = new Observable<Hero[]>();
   pageIndex$ = new BehaviorSubject<number>(0);
   pageSize$ = new BehaviorSubject<number>(5);
@@ -46,67 +48,62 @@ export class ListComponent implements OnInit {
   
   readonly dialog = inject(MatDialog);
   
-  constructor(private heroesService: HeroesService) {}
+  constructor(public heroesService: HeroesService) {}
 
-  ngOnInit(): void {
-    this.pageIndex$ = this.heroesService.getPage();
-    this.pageSize$ = this.heroesService.getPageSize();
-    this.length$ = this.heroesService.getLength();
-
-    this.pageIndex$.subscribe(pageIndex => {
-      this.heroes$ = this.heroesService.getHeroes(pageIndex, this.pageSize$.getValue());
-    });
-
-    this.pageSize$.subscribe(pageSize => {
-      this.heroes$ = this.heroesService.getHeroes(this.pageIndex$.getValue(), pageSize);
-    });
-
-    this.heroes$ = this.heroesService.getHeroes(this.pageIndex$.getValue(), this.pageSize$.getValue());
+  ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
   }
 
   openDeleteDialog = async (id: string) => {
-    const hero = await this.heroesService.getHero(id);
+    
+    const heroSubscription = this.heroesService.getHero(id).subscribe(hero => {
 
-    if (!hero) {
-      return;
-    }
-
-    const dialogRef = this.dialog.open(DeleteHeroDialogComponent, {
-      data: {
-        name: hero.name,
-        id: hero.id
-      },
-    });
-
-    dialogRef.afterClosed().subscribe(newHeroObject => {
-      if (!newHeroObject) {
+      if (!hero) {
         return;
       }
-      this.heroesService.deleteHero(newHeroObject.id);
+
+      const dialogRef = this.dialog.open(DeleteHeroDialogComponent, {
+        data: {
+          name: hero.name,
+          id: hero.id
+        },
+      });
+
+      this.subscriptions.add(this.subscriptions.add(dialogRef.afterClosed().subscribe(newHeroObject => {
+        if (!newHeroObject) {
+          return;
+        }
+        this.heroesService.deleteHero(newHeroObject.id);
+      })));
+
     });
+    this.subscriptions.add(heroSubscription);
   }
 
   openEditDialog = async (id: string) => {
 
-    const hero = await this.heroesService.getHero(id);
-
-    if (!hero) {
-      return;
-    }
-
-    const dialogRef = this.dialog.open(EditHeroDialogComponent, {
-      data: {
-        name: hero.name,
-        id: hero.id
-      },
-    });
-
-    dialogRef.afterClosed().subscribe(newHeroObject => {
-      if (!newHeroObject) {
+    const heroSubscription = this.heroesService.getHero(id).subscribe(hero => {
+      if (!hero) {
         return;
       }
-      this.heroesService.updateHero(newHeroObject);
-    });
+
+      const dialogRef = this.dialog.open(EditHeroDialogComponent, {
+        data: {
+          name: hero.name,
+          id: hero.id
+        },
+      });
+
+      this.subscriptions.add(dialogRef.afterClosed().subscribe(newHeroObject => {
+        if (!newHeroObject) {
+          return;
+        }
+        this.heroesService.updateHero(newHeroObject);
+      }));
+    }
+    );
+
+    this.subscriptions.add(heroSubscription);
   }
 
   openAddDialog = () => {
@@ -114,7 +111,7 @@ export class ListComponent implements OnInit {
       data: {name: ''},
     });
 
-    dialogRef.afterClosed().subscribe(newHeroName => {
+    this.subscriptions.add(dialogRef.afterClosed().subscribe(newHeroName => {
       if (!newHeroName) {
         return;
       }
@@ -124,21 +121,21 @@ export class ListComponent implements OnInit {
         'id':id,
         'name':newHeroName
       });
-    });
+    }));
   }
 
   pageEvent = (event: any) => {
-    this.pageIndex$.next(event.pageIndex);
-    this.pageSize$.next(event.pageSize);
+    this.heroesService.getPage().next(event.pageIndex);
+    this.heroesService.getPageSize().next(event.pageSize);
   }
 
   onChangeSearch = (event: any) => {
-    this.heroes$ = this.heroesService.getHeroByName(event.target.value);
+    this.heroesService.getHeroByName(event.target.value);
   }
 
   clearSearch = () => {
     this.searchText = '';
-    this.heroes$ = this.heroesService.getHeroes(this.pageIndex$.getValue(), this.pageSize$.getValue());
+    this.heroesService.getHeroByName('');
   }
   
 }
