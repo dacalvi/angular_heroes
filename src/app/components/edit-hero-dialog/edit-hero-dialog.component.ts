@@ -23,7 +23,7 @@ export interface DialogData {
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
+    const isSubmitted = form?.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
@@ -74,10 +74,6 @@ export class EditHeroDialogComponent implements OnInit  {
       name: this.nameFormControl.value
     };
     this.dialogRef.close(response);
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
   }
 
 }
