@@ -57,11 +57,6 @@ describe('AddHeroDialogComponent', () => {
     expect(dialogRef.close).toHaveBeenCalledWith('Test Hero');
   });
 
-  it('should close the dialog without a hero name when onNoClick is called', () => {
-    component.onNoClick();
-    expect(dialogRef.close).toHaveBeenCalled();
-  });
-
   it('should display an error message when the name is required and the input is empty', () => {
     component.nameFormControl.markAsTouched();
     fixture.detectChanges();

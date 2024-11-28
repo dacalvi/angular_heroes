@@ -57,8 +57,6 @@ export class AddHeroDialogComponent implements OnInit  {
   ngOnInit(): void {
     this.heroNameInput.nativeElement.focus();
   }
-
- 
   
   heroName = this.data.name;
 
@@ -68,10 +66,6 @@ export class AddHeroDialogComponent implements OnInit  {
 
   save(): void {
     this.dialogRef.close(this.nameFormControl.value);
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
   }
 
 }
