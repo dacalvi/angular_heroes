@@ -1,5 +1,5 @@
 import { Hero } from "../types/hero";
-/*
+
 export const HEROES: Hero[] = [
   { "id": '1', "name": "Superman" },
   { "id": '2', "name": "Batman" },
@@ -201,8 +201,4 @@ export const HEROES: Hero[] = [
   { "id": '198', "name": "Man-At-Arms" },
   { "id": '199', "name": "Orko" },
   { "id": '200', "name": "Battle Cat" }
-];
-*/
-export const HEROES: Hero[] = [
-  { "id": '1', "name": "Superman" }
 ];
