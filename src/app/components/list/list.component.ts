@@ -12,6 +12,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { UppercaseDirective } from '../../directives/uppercase.directive';
+import { EditHeroDialogComponent } from '../edit-hero-dialog/edit-hero-dialog.component';
+
+
 @Component({
   selector: 'app-list',
   standalone: true,
@@ -25,6 +29,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule, 
     MatInputModule,
     MatIconModule,
+    UppercaseDirective
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css',
@@ -58,8 +63,27 @@ export class ListComponent implements OnInit {
     this.heroes$ = this.heroesService.getHeroes(this.pageIndex$.getValue(), this.pageSize$.getValue());
   }
 
-  editHero = (id: string) => {
-    alert(`Editing ${id}`);
+  openEditDialog = async (id: string) => {
+
+    const hero = await this.heroesService.getHero(id);
+
+    if (!hero) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(EditHeroDialogComponent, {
+      data: {
+        name: hero.name,
+        id: hero.id
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(newHeroObject => {
+      if (!newHeroObject) {
+        return;
+      }
+      this.heroesService.updateHero(newHeroObject);
+    });
   }
 
   openAddDialog = () => {
@@ -86,7 +110,6 @@ export class ListComponent implements OnInit {
   }
 
   onChangeSearch = (event: any) => {
-    console.log(event.target.value);
     this.heroes$ = this.heroesService.getHeroByName(event.target.value);
   }
 

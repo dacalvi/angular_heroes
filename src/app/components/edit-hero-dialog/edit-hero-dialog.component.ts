@@ -16,6 +16,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 
 export interface DialogData {
+  id: string;
   name: string;
 }
 
@@ -44,30 +45,35 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     ReactiveFormsModule,
     MatIconModule
   ],
-  templateUrl: './add-hero-dialog.component.html',
-  styleUrl: './add-hero-dialog.component.css'
+  templateUrl: './edit-hero-dialog.component.html',
+  styleUrl: './edit-hero-dialog.component.css',
 })
-export class AddHeroDialogComponent implements OnInit  {
+export class EditHeroDialogComponent implements OnInit  {
   @ViewChild('heroNameInput', {static: true}) heroNameInput!: ElementRef;
   
-  readonly dialogRef = inject(MatDialogRef<AddHeroDialogComponent>);
+  readonly dialogRef = inject(MatDialogRef<EditHeroDialogComponent>);
   readonly data = inject<DialogData>(MAT_DIALOG_DATA);
   
+  nameFormControl = new FormControl('', [Validators.required]);
+  idFormControl = new FormControl('', [Validators.required]);
   
   ngOnInit(): void {
+    this.nameFormControl.setValue(this.data.name);
+    this.idFormControl.setValue(this.data.id);
     this.heroNameInput.nativeElement.focus();
   }
-
- 
   
   heroName = this.data.name;
-
-  nameFormControl = new FormControl('', [Validators.required]);
+  heroId = this.data.id;
 
   matcher = new MyErrorStateMatcher();
 
   save(): void {
-    this.dialogRef.close(this.nameFormControl.value);
+    const response = {
+      id: this.idFormControl.value,
+      name: this.nameFormControl.value
+    };
+    this.dialogRef.close(response);
   }
 
   onNoClick(): void {

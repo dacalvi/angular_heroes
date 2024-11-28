@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>Add new Hero</h2>
+<h2 mat-dialog-title>Edit Hero</h2>
 <mat-dialog-content>
   <form class="example-form" (submit)="save()">
     <mat-form-field class="example-full-width">
@@ -7,9 +7,11 @@
       type="text" 
       matInput
       #heroNameInput
+      
       [formControl]="nameFormControl" 
       [errorStateMatcher]="matcher"
       >
+      <input type="hidden" [value]="heroId" [formControl]="idFormControl">
       @if (nameFormControl.hasError('required')) {
         <mat-error>Name is <strong>required</strong></mat-error>
       }

@@ -40,10 +40,9 @@ export class HeroesService {
     );
   }
 
-  getHero(id: string): Observable<Hero | undefined> {
-    return this.heroes$.pipe(
-      map(heroes => heroes.find(hero => hero.id === id))
-    );
+  async getHero(id: string) {
+    const heroes = await this.heroes$.getValue();
+    return heroes.find(hero => hero.id === id);
   }
 
   getHeroByName(name: string): Observable<Hero[]> {
@@ -52,7 +51,8 @@ export class HeroesService {
         if (!name.trim()) {
           return heroes;
         }
-        return heroes.filter(hero => hero.name.includes(name));
+        const lowerCaseName = name.toLowerCase();
+        return heroes.filter(hero => hero.name.toLowerCase().includes(lowerCaseName));
       })
     );
   }
