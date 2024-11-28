@@ -8,16 +8,16 @@ import { BehaviorSubject, map, Observable, of } from 'rxjs';
 })
 
 export class HeroesService {
-  private heroes$ = new BehaviorSubject<Hero[]>(HEROES);
-  private pageIndex$ = new BehaviorSubject<number>(0);
-  private pageSize$ = new BehaviorSubject<number>(5);
-  private length$ = new BehaviorSubject<number>(HEROES.length);
+  private readonly heroes$ = new BehaviorSubject<Hero[]>(HEROES);
+  private readonly heroesMasterList$ = new BehaviorSubject<Hero[]>(HEROES);
+  private readonly pageIndex$ = new BehaviorSubject<number>(0);
+  private readonly pageSize$ = new BehaviorSubject<number>(5);
+  private readonly length$ = new BehaviorSubject<number>(HEROES.length);
 
   constructor() {
     this.heroes$.next(HEROES);
-    this.heroes$.subscribe(heroes => {
-      this.length$.next(heroes.length);
-    });
+    this.heroesMasterList$.next(HEROES);
+    this.heroesMasterList$.subscribe(heroes => this.length$.next(heroes.length));
   }
 
   getPage(): BehaviorSubject<number> {
@@ -32,42 +32,43 @@ export class HeroesService {
     return this.length$;
   }
 
-  getHeroes(pageIndex: number, pageSize: number): Observable<Hero[]> {
-    const start = pageIndex * pageSize;
-    const end = start + pageSize;
+  getHeroes(): Observable<Hero[]> {
+    const start = this.pageIndex$.getValue() * this.pageSize$.getValue();
+    const end = start + this.pageSize$.getValue();
     return this.heroes$.pipe(
       map(heroes => heroes.slice(start, end))
     );
   }
 
-  async getHero(id: string) {
-    const heroes = await this.heroes$.getValue();
-    return heroes.find(hero => hero.id === id);
-  }
-
-  getHeroByName(name: string): Observable<Hero[]> {
-    return this.heroes$.pipe(
-      map(heroes => {
-        if (!name.trim()) {
-          return heroes;
-        }
-        const lowerCaseName = name.toLowerCase();
-        return heroes.filter(hero => hero.name.toLowerCase().includes(lowerCaseName));
-      })
+  getHero(id: string): Observable<Hero | undefined>  {
+    return this.heroesMasterList$.pipe(
+      map(heroes => heroes.find(hero => hero.id === id))
     );
   }
 
-  addHero(hero: Hero): Observable<Hero> {
-    this.heroes$.next([hero, ...this.heroes$.getValue()]);
-    return of(hero);
+  getHeroByName(name: string): void {
+    if (!name.trim()) {
+      this.heroes$.next(this.heroesMasterList$.getValue());
+    }
+    const lowerCaseName = name.toLowerCase();
+    this.heroes$.next(this.heroesMasterList$.getValue().filter(hero => hero.name.toLowerCase().includes(lowerCaseName)));
+  }
+
+  addHero(hero: Hero): void {
+    const currentHeroes = this.heroesMasterList$.getValue();
+    const updatedHeroes = [hero, ...currentHeroes];
+    this.heroesMasterList$.next(updatedHeroes);
+    this.heroes$.next(updatedHeroes);
   }
 
   updateHero(updatedHero: Hero): Observable<Hero> {
-    this.heroes$.next(this.heroes$.getValue().map(hero => hero.id === updatedHero.id ? updatedHero : hero));
+    this.heroesMasterList$.next(this.heroesMasterList$.getValue().map(hero => hero.id === updatedHero.id ? updatedHero : hero));
+    this.heroes$.next(this.heroesMasterList$.getValue());
     return of(updatedHero);
   }
 
   deleteHero(id: string): void {
-    this.heroes$.next(this.heroes$.getValue().filter(hero => hero.id !== id));
+    this.heroesMasterList$.next(this.heroesMasterList$.getValue().filter(hero => hero.id !== id));
+    this.heroes$.next(this.heroesMasterList$.getValue());
   }
 }
