@@ -1,4 +1,19 @@
-# Spa
+# Prueba Tecnica Daniel Calvi - App de Heroes en Angular
+
+## Cobertura de Codigo
+
+![image](https://github.com/user-attachments/assets/26672906-45bb-402f-bf80-2a9a2a273f9e)
+
+## Estructura de Carpetas
+
+![image](https://github.com/user-attachments/assets/b49f5a8d-c40a-422b-94b9-da859ee9a8ea)
+
+## Notas Adicionales
+
+El interceptor solicitado no fue implementado debido a que no se realizan llamadas http, sino que se hace un mock de los heroes en el servicio usando un archivo adicional con los datos. 
+
+
+## Inicio Readme Original de Angular - Instrucciones de inicio
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.11.
 
