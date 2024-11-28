@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AddHeroDialogComponent, MyErrorStateMatcher } from './add-hero-dialog.component';
+import { AddHeroDialogComponent } from './add-hero-dialog.component';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ReactiveFormsModule } from '@angular/forms';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('AddHeroDialogComponent', () => {
   let component: AddHeroDialogComponent;

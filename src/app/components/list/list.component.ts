@@ -84,13 +84,13 @@ export class ListComponent {
     const heroToEdit: Hero = { id: '', name: '' };
 
     this.heroesService.getHero(id).subscribe(hero => {
-      if (!hero) {
-        return;
-      }
-      heroToEdit.id = hero.id ?? '';
-      heroToEdit.name = hero.name;
+      heroToEdit.id = hero?.id ?? '';
+      heroToEdit.name = hero?.name ?? '';
     });
     
+    if (heroToEdit.id === '') {
+      return;
+    }
     const dialogRef = this.dialog.open(EditHeroDialogComponent, {
       data: {
         name: heroToEdit.name,

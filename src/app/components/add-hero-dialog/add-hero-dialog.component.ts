@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, ElementRef, inject, model, OnInit, ViewChild } from '@angular/core';
+import {Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {FormControl, FormGroupDirective, FormsModule, NgForm, ReactiveFormsModule, Validators} from '@angular/forms';
@@ -22,7 +22,7 @@ export interface DialogData {
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
+    const isSubmitted = form?.submitted;
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }

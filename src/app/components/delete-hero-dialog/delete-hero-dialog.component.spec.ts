@@ -44,6 +44,16 @@ describe('DeleteHeroDialogComponent', () => {
     const dialogContent = fixture.nativeElement.querySelector('mat-dialog-content');
     expect(dialogContent.textContent).toContain('Test Hero');
   });
+  
+  it('should close the dialog with the hero id when delete is called', () => {
+    component.idFormControl.setValue('1');
+    component.delete();
+    expect(dialogRef.close).toHaveBeenCalledWith({ id: '1' });
+  });
 
+  it('should close the dialog without data when onNoClick is called', () => {
+    component.onNoClick();
+    expect(dialogRef.close).toHaveBeenCalled();
+  });
   
 });

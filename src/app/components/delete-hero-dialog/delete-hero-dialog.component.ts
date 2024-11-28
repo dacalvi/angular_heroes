@@ -1,7 +1,7 @@
-import { Component, ElementRef, inject,  OnInit, ViewChild } from '@angular/core';
+import { Component, inject,  OnInit } from '@angular/core';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {FormControl, FormGroupDirective, FormsModule, NgForm, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButtonModule} from '@angular/material/button';
 
 import {
@@ -12,7 +12,6 @@ import {
   MatDialogRef,
   MatDialogTitle,
 } from '@angular/material/dialog';
-import { ErrorStateMatcher } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 
 export interface DialogData {
