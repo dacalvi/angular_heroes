@@ -59,7 +59,7 @@ describe('EditHeroDialogComponent', () => {
     component.nameFormControl.setValue('Updated Hero');
     component.idFormControl.setValue('2');
     component.save();
-    expect(dialogRef.close).toHaveBeenCalledWith({ id: '2', name: 'Updated Hero' });
+    expect(dialogRef.close).toHaveBeenCalledWith({ id: '2', name: 'Updated Hero', description: undefined, image: undefined });
   });
 
   it('should display an error message when the name is required and the input is empty', () => {

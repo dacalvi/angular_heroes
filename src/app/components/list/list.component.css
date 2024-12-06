@@ -1,41 +1,50 @@
-section {
-  display: table;
-}
-
-.example-label {
-  display: table-cell;
-  font-size: 14px;
-  margin-left: 8px;
-  min-width: 120px;
-}
-
-.example-button-row {
-  display: table-cell;
-  max-width: 600px;
-}
-
-.example-button-row .mat-mdc-button-base {
-  margin: 8px 8px 8px 0;
-}
-
-.example-flex-container {
+.action-card {
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
-  flex-wrap: wrap;
+  align-items: center;
+  padding: 16px;
+  margin-bottom: 15px;
 }
 
-.example-button-container {
+.hero-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: end;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.search-field {
+  flex: 1;
+}
+
+.heroes-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 16px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: white;
+}
+
+.paginator {
   display: flex;
   justify-content: center;
-  width: 140px;
+  margin-top: 15px;
+  border-radius: 5px;
 }
 
-.example-form {
-  min-width: 150px;
-  max-width: 500px;
-  width: 100%;
+
+.hero-card {
+  padding: 16px;
 }
 
-.example-full-width {
-  width: 100%;
+.addHeroButton {
+  margin-top: 8px;
 }

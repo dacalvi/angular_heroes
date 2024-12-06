@@ -18,6 +18,8 @@ import { MatIconModule } from '@angular/material/icon';
 export interface DialogData {
   id: string;
   name: string;
+  description: string;
+  image: string;
 }
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -65,13 +67,17 @@ export class EditHeroDialogComponent implements OnInit  {
   
   heroName = this.data.name;
   heroId = this.data.id;
+  heroDescription = this.data.description;
+  heroImage = this.data.image;
 
   matcher = new MyErrorStateMatcher();
 
   save(): void {
     const response = {
       id: this.idFormControl.value,
-      name: this.nameFormControl.value
+      name: this.nameFormControl.value,
+      description: this.heroDescription,
+      image: this.heroImage,
     };
     this.dialogRef.close(response);
   }

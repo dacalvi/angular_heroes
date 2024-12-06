@@ -50,7 +50,7 @@ describe('HeroesService', () => {
   });
 
   it('should add a hero', (done) => {
-    const newHero = { id: '4', name: 'New Hero' };
+    const newHero = { id: '4', name: 'New Hero', description: 'HeroDescription', image: 'HeroImage'  };
     service.addHero(newHero);
     service.getHeroes().subscribe(heroes => {
       expect(heroes).toContain(newHero);
@@ -59,7 +59,7 @@ describe('HeroesService', () => {
   });
 
   it('should update a hero', (done) => {
-    const updatedHero = { id: '2', name: 'Updated Hero' };
+    const updatedHero = { id: '2', name: 'Updated Hero', description: 'HeroDescription', image: 'HeroImage'  };
     service.updateHero(updatedHero).subscribe(hero => {
       expect(hero).toEqual(updatedHero);
       service.getHero('2').subscribe(hero => {
@@ -70,7 +70,7 @@ describe('HeroesService', () => {
   });
 
   it('should not update a hero if id does not exist', (done) => {
-    const updatedHero = { id: '300', name: 'Non-existent Hero' };
+    const updatedHero = { id: '300', name: 'Non-existent Hero', description: 'HeroDescription', image: 'HeroImage'  };
     service.updateHero(updatedHero).subscribe(hero => {
       expect(hero).toEqual(updatedHero);
       service.getHero('300').subscribe(hero => {
@@ -91,7 +91,7 @@ describe('HeroesService', () => {
   it('should not change heroes if id does not exist', (done) => {
     service.deleteHero('500');
     service.getLength().subscribe(length => {
-      expect(length).toEqual(200);
+      expect(length).toEqual(40);
       done();
     });
   });

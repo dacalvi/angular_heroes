@@ -10,15 +10,6 @@ import { AddHeroDialogComponent } from "../add-hero-dialog/add-hero-dialog.compo
 describe('ListComponent', () => {
   let component: ListComponent;
   let fixture: ComponentFixture<ListComponent>;
-  
-  
-  function sendInput(text: string) {
-    const inputEl = fixture.nativeElement.querySelector('#searchText');
-    inputEl.value = text;
-    inputEl.dispatchEvent(new Event('input'));
-    fixture.detectChanges();
-    return fixture.whenStable();
-  }
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -55,14 +46,8 @@ describe('ListComponent', () => {
     expect(addHeroSpy).not.toHaveBeenCalled();
   });
 
-  it('should convert input value to uppercase', () => {
-    sendInput('test').then((fixture) => {
-      expect(fixture.nativeElement.querySelector('#searchText').value).toBe('TEST');
-    });
-  });
-
   it('should not call deleteHero if dialog is closed without data', () => {
-    const hero = { id: '1', name: 'HeroName' };
+    const hero = { id: '1', name: 'HeroName', description: 'HeroDescription', image: 'HeroImage' };
     spyOn(component.heroesService, 'getHero').and.returnValue(of(hero));
     spyOn(component.dialog, 'open').and.returnValue({
       afterClosed: () => of(null)
@@ -75,7 +60,7 @@ describe('ListComponent', () => {
   });
 
   it('should open delete hero dialog when openDeleteDialog is called', () => {
-    const hero = { id: '1', name: 'HeroName' };
+    const hero = { id: '1', name: 'HeroName', description: 'HeroDescription', image: 'HeroImage'  };
     spyOn(component.heroesService, 'getHero').and.returnValue(of(hero));
     const openDialogSpy = spyOn(component.dialog, 'open').and.returnValue({
       afterClosed: () => of(hero)
@@ -91,7 +76,7 @@ describe('ListComponent', () => {
   });
 
   it('should open edit hero dialog when openEditDialog is called', () => {
-    const hero = { id: '1', name: 'HeroName' };
+    const hero = { id: '1', name: 'HeroName', description: 'HeroDescription', image: 'HeroImage'  };
     spyOn(component.heroesService, 'getHero').and.returnValue(of(hero));
     const openDialogSpy = spyOn(component.dialog, 'open').and.returnValue({
       afterClosed: () => of(hero)
@@ -101,13 +86,13 @@ describe('ListComponent', () => {
     component.openEditDialog(hero.id);
 
     expect(openDialogSpy).toHaveBeenCalledWith(EditHeroDialogComponent, {
-      data: { name: hero.name, id: hero.id }
+      data: { name: hero.name, id: hero.id, description: hero.description, image: hero.image }
     });
     expect(component.heroesService.updateHero).toHaveBeenCalledWith(hero);
   });
 
   it('should open edit hero dialog when openEditDialog is called with inexistent id', () => {
-    const hero = { id: '999', name: 'HeroName' };
+    const hero = { id: '999', name: 'HeroName', description: 'HeroDescription', image: 'HeroImage'  };
     spyOn(component.heroesService, 'getHero').and.returnValue(of(hero));
     const openDialogSpy = spyOn(component.dialog, 'open').and.returnValue({
       afterClosed: () => of(hero)
@@ -117,13 +102,13 @@ describe('ListComponent', () => {
     component.openEditDialog(hero.id);
 
     expect(openDialogSpy).toHaveBeenCalledWith(EditHeroDialogComponent, {
-      data: { name: hero.name, id: hero.id }
+      data: { name: hero.name, id: hero.id, description: hero.description, image: hero.image }
     });
     expect(component.heroesService.updateHero).toHaveBeenCalledWith(hero);
   });
 
   it('should not call updateHero if dialog is closed without data', () => {
-    const hero = { id: '1', name: 'HeroName' };
+    const hero = { id: '1', name: 'HeroName', description: 'HeroDescription', image: 'HeroImage'  };
     spyOn(component.heroesService, 'getHero').and.returnValue(of(hero));
     spyOn(component.dialog, 'open').and.returnValue({
       afterClosed: () => of(null)

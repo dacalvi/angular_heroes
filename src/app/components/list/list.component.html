@@ -1,28 +1,42 @@
-<button id="addHeroButton" mat-stroked-button (click)="openAddDialog()">Add Hero</button>
 
-<mat-form-field class="example-full-width">
-    <mat-label>Search for a Hero</mat-label>
-    <input id="searchText" toUppercase matInput value="{{searchText}}" [(ngModel)]="searchText" (keyup)="onChangeSearch($event)" type="text">
-    @if (searchText) {
-    <button matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
-        <mat-icon>close</mat-icon>
-    </button>
-    }
-</mat-form-field>
+<mat-card class="action-card">
+    <div class="actions">
+        <mat-form-field class="search-field" appearance="outline">
+            <mat-label>Search for a Hero</mat-label>
+            <input id="searchText" toUppercase matInput value="{{searchText}}" [(ngModel)]="searchText" (keyup)="onChangeSearch($event)" type="text">
+            @if (searchText) {
+                <button matSuffix mat-icon-button aria-label="Clear" (click)="clearSearch()">
+                    <mat-icon>close</mat-icon>
+                </button>
+            }
+        </mat-form-field>
+        <button mat-mini-fab color="primary" (click)="openAddDialog()" aria-label="Add Hero" class="addHeroButton">
+            <mat-icon>add</mat-icon>
+          </button>
+    </div>
+  </mat-card>
 
-<mat-list>
-    <mat-list-item *ngFor="let hero of heroesService.getHeroes() | async ">
-        <span style="display: flex; justify-content: space-between; width: 100%;">
-            <span>{{hero.name}}</span>
-            <span>
-                <button mat-button (click)="openEditDialog(hero.id)">Edit</button>
-                <button mat-button (click)="openDeleteDialog(hero.id)">Delete</button>
-            </span>
-        </span>
-    </mat-list-item>
-</mat-list>
+  <div class="heroes-list">
+    <mat-card *ngFor="let hero of heroesService.getHeroes() | async" class="hero-card" [ngStyle]="{'background-image': 'linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.8)), url(' + hero.image + ')', 'background-size': 'cover', 'background-position': 'center', 'color': 'white', 'text-shadow': '1px 1px 2px black'}">
+      <mat-card-content>
+        <h2>{{ hero.name }}</h2>
+        <p>{{ hero.description }}</p>
+      </mat-card-content>
+      <div class="hero-actions">
+        <button mat-icon-button color="primary" aria-label="Edit Hero" (click)="openEditDialog(hero.id)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" aria-label="Delete Hero" (click)="openDeleteDialog(hero.id)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+        </mat-card>
+  </div>
+
+
 
 <mat-paginator 
+class="paginator" 
     [length]="heroesService.getLength() | async" 
     [pageIndex]="heroesService.getPage() | async"
     (page)="pageEvent($event)" 

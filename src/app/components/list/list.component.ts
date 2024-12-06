@@ -3,7 +3,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { Hero } from '../../types/hero';
 import { HeroesService } from '../../services/heroes.service';
-import { AsyncPipe, NgFor } from '@angular/common';
+import { AsyncPipe, NgFor, NgStyle } from '@angular/common';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
@@ -15,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { UppercaseDirective } from '../../directives/uppercase.directive';
 import { EditHeroDialogComponent } from '../edit-hero-dialog/edit-hero-dialog.component';
 import { DeleteHeroDialogComponent } from '../delete-hero-dialog/delete-hero-dialog.component';
+import {MatCardModule} from '@angular/material/card';
 
 
 @Component({
@@ -30,7 +31,9 @@ import { DeleteHeroDialogComponent } from '../delete-hero-dialog/delete-hero-dia
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
-    UppercaseDirective
+    UppercaseDirective,
+    MatCardModule,
+    NgStyle
   ],
   templateUrl: './list.component.html',
   styleUrl: './list.component.css',
@@ -49,7 +52,7 @@ export class ListComponent {
   constructor(public heroesService: HeroesService) { }
 
   openDeleteDialog = async (id: string) => {
-    const heroToDelete: Hero = { id: '', name: '' };
+    const heroToDelete: Hero = { id: '', name: '', description: '', image: '' };
     this.heroesService.getHero(id).subscribe(hero => {
       if (!hero) {
         return;
@@ -81,11 +84,13 @@ export class ListComponent {
 
   openEditDialog = async (id: string) => {
 
-    const heroToEdit: Hero = { id: '', name: '' };
+    const heroToEdit: Hero = { id: '', name: '', description: '', image: '' };
 
     this.heroesService.getHero(id).subscribe(hero => {
       heroToEdit.id = hero?.id ?? '';
       heroToEdit.name = hero?.name ?? '';
+      heroToEdit.description = hero?.description ?? '';
+      heroToEdit.image = hero?.image ?? '';
     });
     
     if (heroToEdit.id === '') {
@@ -94,7 +99,9 @@ export class ListComponent {
     const dialogRef = this.dialog.open(EditHeroDialogComponent, {
       data: {
         name: heroToEdit.name,
-        id: heroToEdit.id
+        id: heroToEdit.id,
+        description: heroToEdit.description,
+        image: heroToEdit.image
       },
     });
 
@@ -121,7 +128,9 @@ export class ListComponent {
       const id = Math.random().toString(36).substring(7);
       this.heroesService.addHero({
         'id': id,
-        'name': newHeroName
+        'name': newHeroName,
+        'description': 'Custom hero created by the user',
+        'image': 'https://cdn.pixabay.com/photo/2022/10/05/04/11/super-hero-7499630_1280.jpg'
       });
     });
   }
