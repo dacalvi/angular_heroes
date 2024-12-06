@@ -10,10 +10,10 @@ import { AddHeroDialogComponent } from "../add-hero-dialog/add-hero-dialog.compo
 describe('ListComponent', () => {
   let component: ListComponent;
   let fixture: ComponentFixture<ListComponent>;
-  let addHeroButton: HTMLElement;
-  let inputEl: HTMLInputElement;
+  
   
   function sendInput(text: string) {
+    const inputEl = fixture.nativeElement.querySelector('#searchText');
     inputEl.value = text;
     inputEl.dispatchEvent(new Event('input'));
     fixture.detectChanges();
@@ -26,7 +26,6 @@ describe('ListComponent', () => {
     });
     fixture = TestBed.createComponent(ListComponent);
     component = fixture.componentInstance; // BannerComponent test instance
-    inputEl = fixture.nativeElement.querySelector('#searchText');
   });
 
   it('should open add hero dialog when openAddDialog is called', () => {
@@ -57,8 +56,8 @@ describe('ListComponent', () => {
   });
 
   it('should convert input value to uppercase', () => {
-    sendInput('test').then(() => {
-      expect(inputEl.value).toBe('TEST');
+    sendInput('test').then((fixture) => {
+      expect(fixture.nativeElement.querySelector('#searchText').value).toBe('TEST');
     });
   });
 
